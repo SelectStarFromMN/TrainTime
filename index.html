@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Train Schedule</title>
+
+    <!-- Link to jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <!-- Link to Bootstrap -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
+    <!-- Link to Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/4.13.0/firebase.js"></script>
+
+    <!-- Link to Moment -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js"></script>
+
+    <!-- Link to Stylesheet -->
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+
+    <!-- Link to favicon -->
+    <link rel="icon" type="image/png" href="./assets/images/favicon.png" />
+
+
+</head>
+
+<body>
+
+    <!-- Jumbotron for Title -->
+    <div class="jumbotron border-bottom border-dark">
+        <h1 class="text-center">Catch that Train!</h1>
+        <h2 class="text-center">Incoming Train Schedule</h2>
+    </div>
+
+    <!-- Bootstrap Container -->
+    <div class="container">
+
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <strong>Current Train Schedule</strong>
+                </h3>
+            </div>
+            <div class="panel-body border border-dark">
+                <table id="train-table" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Train Name</th>
+                            <th scope="col">Destination</th>
+                            <th scope="col">Frequency (minutes)</th>
+                            <th scope="col">Next Arrival</th>
+                            <th scope="col">Minutes Away</th>
+                        </tr>
+                    </thead>
+                    <tbody id="train-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    <strong>Add Train</strong>
+                </h3>
+            </div>
+            <div class="col-5 panel-body border border-dark">
+                <form>
+                    <div class="form-group">
+                        <label for="InputName">Train Name</label>
+                        <input type="text" class="form-control" id="input-name" placeholder="Enter Train Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputDest">Destination</label>
+                        <input type="text" class="form-control" id="input-dest" placeholder="Enter Destination">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputStart">First Train Time (HH:MI)</label>
+                        <input type="text" class="form-control" id="input-start" placeholder="Enter Start - Military Time (ex 14:45)">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputFreq">Frequency (minutes)</label>
+                        <input type="text" class="form-control" id="input-freq" placeholder="Enter Frequency (ex: 120)">
+                    </div>
+                    <button id="submit-train-btn" type="submit" class="btn btn-light border border-dark">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    </div>
+    <!-- End Container-->
+
+    <!-- Link to JavaScript -->
+    <script src="./assets/javascript/app.js"></script>
+</body>
+
+</html>

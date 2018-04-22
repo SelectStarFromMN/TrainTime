@@ -1,0 +1,12 @@
+.jumbotron {
+    background-image: url('../images/magtrain.jpg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: blue;
+    text-shadow:
+        -1px -1px 0 black,
+        1px -1px 0 black,
+        -1px 1px 0 black,
+        1px 1px 0 black;  
+
+}
