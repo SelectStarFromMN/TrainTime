@@ -34,7 +34,7 @@
     <!-- Jumbotron for Title -->
     <div class="jumbotron border-bottom border-dark">
         <h1 class="text-center">Catch that Train!</h1>
-        <h2 class="text-center">Incoming Train Schedule</h2>
+        <h2 class="text-center">Incoming Arrival Schedule</h2>
     </div>
 
     <!-- Bootstrap Container -->
@@ -44,7 +44,8 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    <strong>Current Train Schedule</strong>
+                    <strong>Central Station Incoming Schedule as of: </strong>
+                    <span id="station-clock"></span>
                 </h3>
             </div>
             <div class="panel-body border border-dark">
@@ -68,10 +69,10 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    <strong>Add Train</strong>
+                    <strong>Add/Delete Train</strong>
                 </h3>
             </div>
-            <div class="col-5 panel-body border border-dark">
+            <div class="col-6 panel-body border border-dark">
                 <form>
                     <div class="form-group">
                         <label for="InputName">Train Name</label>
@@ -90,6 +91,7 @@
                         <input type="text" class="form-control" id="input-freq" placeholder="Enter Frequency (ex: 120)">
                     </div>
                     <button id="submit-train-btn" type="submit" class="btn btn-light border border-dark">Submit</button>
+                    <button id="delete-train-btn" type="submit" class="btn btn-light border border-dark" style="display: none;">Delete</button>
                 </form>
             </div>
         </div>
