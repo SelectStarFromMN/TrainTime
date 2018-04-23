@@ -35,14 +35,14 @@ $("#submit-train-btn").on("click", function (event) {
 
     // Save the new Train info in Firebase
     // Note how we are using the Firebase .push() method for New and .update() for Existing record
-    if (clickedRowPkey) {
+    if (clickedRowPkey && trainName && trainDest && trainStart && trainFreq) {
         database.ref().child(clickedRowPkey).update({
             trainName: trainName,
             trainDest: trainDest,
             trainStart: trainStartMoment,
             trainFreq: trainFreq
         });
-    } else {
+    } else if (trainName && trainDest && trainStart && trainFreq) {
         database.ref().push({
             trainName: trainName,
             trainDest: trainDest,
@@ -51,12 +51,18 @@ $("#submit-train-btn").on("click", function (event) {
         })
     }
 
+    // Clear clicked row
+    clickedRowPkey = "";
+
     // Clear text boxes
     $("#input-name").val("");
     $("#input-dest").val("");
     $("#input-start").val("");
     $("#input-freq").val("");
     $("#input-name").focus();
+
+    // Context name the Submit button
+    $("#submit-train-btn").text("Add");
 
     // Clear the table
     $("#train-table-body").empty();
@@ -131,6 +137,7 @@ function refreshTable() {
     // Hide Delete button if no row selected
     if (!clickedRowPkey) {
         $("#delete-train-btn").hide();
+        $("#clear-train-btn").hide();
     }
 }
 
@@ -158,10 +165,14 @@ $(document.body).on("click", ".schedule-row", function () {
     // Store the pKey
     clickedRowPkey = dbKey;
 
-    // Enable Delete Button
+    // Enable Delete & Clear Buttons
     if (clickedRowPkey) {
         $("#delete-train-btn").show();
+        $("#clear-train-btn").show();
     }
+
+    // Context name the Submit button
+    $("#submit-train-btn").text("Update");
 })
 
 
@@ -188,6 +199,38 @@ $("#delete-train-btn").on("click", function (event) {
     // Hide the Delete button
     $("#delete-train-btn").hide();
 
+    // Hide the Clear button
+    $("#clear-train-btn").hide();
+
+    // Context name the Submit button
+    $("#submit-train-btn").text("Add");
+
     // Refresh table (avoid Firebase event delay)
     refreshTable();
+})
+
+
+// Whenever a user clicks the Clear Train button
+$("#clear-train-btn").on("click", function (event) {
+    // Prevent form from submitting
+    event.preventDefault();
+
+    // Clear deleted PKey
+    clickedRowPkey = "";
+
+    // Clear text boxes
+    $("#input-name").val("");
+    $("#input-dest").val("");
+    $("#input-start").val("");
+    $("#input-freq").val("");
+    $("#input-name").focus();
+
+    // Hide the Delete button
+    $("#delete-train-btn").hide();
+
+    // Hide the Clear button
+    $("#clear-train-btn").hide();
+
+    // Context name the Submit button
+    $("#submit-train-btn").text("Add");
 })
