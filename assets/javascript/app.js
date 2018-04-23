@@ -60,6 +60,9 @@ $("#submit-train-btn").on("click", function (event) {
 
     // Clear the table
     $("#train-table-body").empty();
+
+    // Refresh table (avoid Firebase event delay)
+    refreshTable();
 })
 
 // At the initial load and subsequent value changes, get a snapshot of the stored data.
