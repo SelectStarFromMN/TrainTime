@@ -14,14 +14,14 @@ firebase.initializeApp(config);
 // Get a reference to the database service
 var database = firebase.database();
 
-// Update schedule and clock every 30 seconds
+// Update schedule and clock every 15 seconds
 var clockTimer = setInterval(refreshTable, 15000);
 
 // DB Pkey of clicked row
 var clickedRowPkey = '';
 
 
-// Whenever a user clicks the submit Add Train button
+// Whenever a user clicks the submit Add/Update Train button
 $("#submit-train-btn").on("click", function (event) {
     // Prevent form from submitting
     event.preventDefault();
@@ -51,37 +51,25 @@ $("#submit-train-btn").on("click", function (event) {
         })
     }
 
-    // Clear clicked row
-    clickedRowPkey = "";
-
-    // Clear text boxes
-    $("#input-name").val("");
-    $("#input-dest").val("");
-    $("#input-start").val("");
-    $("#input-freq").val("");
-    $("#input-name").focus();
-
-    // Context name the Submit button
-    $("#submit-train-btn").text("Add");
-
-    // Clear the table
-    $("#train-table-body").empty();
+    // Clear the form and setup for Add
+    configureForm('Add', '');
 
     // Refresh table (avoid Firebase event delay)
     refreshTable();
 })
 
 // At the initial load and subsequent value changes, get a snapshot of the stored data.
-// This function allows you to update your page in real-time when the firebase database changes.
+// This event function allows you to update your page in real-time when the firebase database changes.
 database.ref().on("child_added", function (snapshot) {
     displayTrain(snapshot);
 })
 
+// Format current moment and update #station-clock
 function refreshClock() {
     $("#station-clock").text(moment().format("hh:mm a"))
 }
 
-
+// Take the snapshot train record and append a table-row using record attributes and computed values for table-data cells
 function displayTrain(snapshot) {
     var trainRec = snapshot.val();
     var trainStart = moment(trainRec.trainStart).format("HH:mm");
@@ -115,13 +103,12 @@ function displayTrain(snapshot) {
     // console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
     /////////////////////////////////////////
 
-    // Refresh station clock
-    refreshClock();
-
+    // Append table-row using record attributes and computed values for table-data cells
     // Table Columns: <id=pkey hidden>, Name, Dest, Freq, NextArrival(computed), MinutesAway(computed)
     $("#train-table-body").append(`<tr id="${snapshot.key}" class="schedule-row"><td style="display:none;">${moment(trainRec.trainStart).format('HH:mm')}</td><td>${trainRec.trainName}</td><td>${trainRec.trainDest}</td><td>${trainRec.trainFreq}</td><td style="color:blue">${moment(nextTrain).format("hh:mm")}</td><td>${tMinutesTillTrain}</td></tr>`)
 }
 
+// Refresh the train table (avoid realtime event lag)
 function refreshTable() {
     // Refresh the clock
     refreshClock();
@@ -129,16 +116,10 @@ function refreshTable() {
     // Clear the table
     $("#train-table-body").empty();
 
-    // Query dbref (order by pkey, no limit) and refresh the table
+    // Query dbref (order by pkey, no limit) and display each train
     database.ref().orderByKey().on("child_added", function (snapshot) {
         displayTrain(snapshot);
     })
-
-    // Hide Delete button if no row selected
-    if (!clickedRowPkey) {
-        $("#delete-train-btn").hide();
-        $("#clear-train-btn").hide();
-    }
 }
 
 
@@ -162,17 +143,9 @@ $(document.body).on("click", ".schedule-row", function () {
     $("#input-start").val(startTimeStr);
     $("#input-freq").val(trainFreq);
 
-    // Store the pKey
-    clickedRowPkey = dbKey;
+    // Clear the form and setup for Update
+    configureForm('Update', dbKey);
 
-    // Enable Delete & Clear Buttons
-    if (clickedRowPkey) {
-        $("#delete-train-btn").show();
-        $("#clear-train-btn").show();
-    }
-
-    // Context name the Submit button
-    $("#submit-train-btn").text("Update");
 })
 
 
@@ -186,24 +159,8 @@ $("#delete-train-btn").on("click", function (event) {
         database.ref().child(clickedRowPkey).remove();
     }
 
-    // Clear deleted PKey
-    clickedRowPkey = "";
-
-    // Clear text boxes
-    $("#input-name").val("");
-    $("#input-dest").val("");
-    $("#input-start").val("");
-    $("#input-freq").val("");
-    $("#input-name").focus();
-
-    // Hide the Delete button
-    $("#delete-train-btn").hide();
-
-    // Hide the Clear button
-    $("#clear-train-btn").hide();
-
-    // Context name the Submit button
-    $("#submit-train-btn").text("Add");
+    // Clear the form and setup for Add
+    configureForm('Add', '');
 
     // Refresh table (avoid Firebase event delay)
     refreshTable();
@@ -215,22 +172,41 @@ $("#clear-train-btn").on("click", function (event) {
     // Prevent form from submitting
     event.preventDefault();
 
-    // Clear deleted PKey
-    clickedRowPkey = "";
+    // Clear the form and setup for Add
+    configureForm('Add', '');
+})
 
-    // Clear text boxes
-    $("#input-name").val("");
-    $("#input-dest").val("");
-    $("#input-start").val("");
-    $("#input-freq").val("");
-    $("#input-name").focus();
+// Configure Form input/buttons for given state (ex: Add, Update). Note Update === Delete
+function configureForm (state, clickedRow) {
 
-    // Hide the Delete button
-    $("#delete-train-btn").hide();
-
-    // Hide the Clear button
-    $("#clear-train-btn").hide();
+    // Update global handle on clicked row
+    clickedRowPkey = clickedRow;
 
     // Context name the Submit button
-    $("#submit-train-btn").text("Add");
-})
+    $("#submit-train-btn").text(state);
+
+    if (state == 'Add') {
+
+        // Clear text boxes
+        $("#input-name").val("");
+        $("#input-dest").val("");
+        $("#input-start").val("");
+        $("#input-freq").val("");
+        $("#input-name").focus();
+
+
+        // Hide the Delete & Clear buttons
+        $("#delete-train-btn").hide();
+        $("#clear-train-btn").hide();
+
+    }
+    else if (state = 'Update') {
+        // Leave input text boxes as they are populated
+        // Enable Delete (guarded) & Clear Buttons
+        if (clickedRowPkey) 
+            $("#delete-train-btn").show();
+        $("#clear-train-btn").show();
+        
+    }
+
+}
