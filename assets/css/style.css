@@ -3,11 +3,24 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
     letter-spacing: 2px;
-    color: blue;
+    color: #A8CAFF;
+    font-style: italic;
     text-shadow:
         -1px -1px 0 black,
         1px -1px 0 black,
         -1px 1px 0 black,
         1px 1px 0 black;  
 
+}
+
+body {
+    background-color: #A8CAFF;
+}
+
+.panel-body {
+    background-color: white;
+}
+
+#station-clock {
+    color: blue;
 }

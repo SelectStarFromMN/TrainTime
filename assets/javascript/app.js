@@ -119,7 +119,7 @@ function displayTrain(snapshot) {
     refreshClock();
 
     // Table Columns: <id=pkey hidden>, Name, Dest, Freq, NextArrival(computed), MinutesAway(computed)
-    $("#train-table-body").append(`<tr id="${snapshot.key}" class="schedule-row"><td style="display:none;">${moment(trainRec.trainStart).format('HH:mm')}</td><td>${trainRec.trainName}</td><td>${trainRec.trainDest}</td><td>${trainRec.trainFreq}</td><td>${moment(nextTrain).format("hh:mm")}</td><td>${tMinutesTillTrain}</td></tr>`)
+    $("#train-table-body").append(`<tr id="${snapshot.key}" class="schedule-row"><td style="display:none;">${moment(trainRec.trainStart).format('HH:mm')}</td><td>${trainRec.trainName}</td><td>${trainRec.trainDest}</td><td>${trainRec.trainFreq}</td><td>${moment(nextTrain).format("hh:mm")}</td><td style="color:blue">${tMinutesTillTrain}</td></tr>`)
 }
 
 function refreshTable() {
